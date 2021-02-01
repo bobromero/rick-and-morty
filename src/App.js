@@ -1,23 +1,31 @@
-import logo from './logo.svg';
+import React from 'react';
+import axios from 'axios';
 import './App.css';
 
 function App() {
+  const [chars, setChars] = React.useState([]);
+
+  React.useEffect(() => {
+      axios.get('https://rickandmortyapi.com/api/character')
+          .then(res => {
+              const newChars = res.data.results;
+              setChars(newChars);
+          });
+  },[]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="grid-container">
+      {chars.map(c => {
+        return (
+          <div className="grid-item">
+            <img src={c.image} alt=""></img>
+            <p>{c.name}</p>
+            <p>{c.status}</p>
+            <p>{c.species}</p>
+            <p>{c.gender}</p>
+          </div>
+        );
+      })}
     </div>
   );
 }
